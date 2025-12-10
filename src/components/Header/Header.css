@@ -1,5 +1,5 @@
 .header-container {
-  background-color: #ffffff;
+  background-color: var(--secondary-color);
   padding: 20px;
   text-align: center;
   color: #000000;
@@ -26,7 +26,7 @@ nav a {
 button {
   padding: 10px 15px;
   border: none;
-  background-color: #ffffff;
+  background-color: var(--secondary-color);
   color: #000000;
   cursor: pointer;
 }
