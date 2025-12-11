@@ -1,10 +1,10 @@
 .homepage
 {
    display: grid;
-   grid-template-columns: 1fr  ;
+   grid-template-columns: auto ;
    grid-template-rows:45vh auto ;
    width: 100%;
-   height: 100vh;
+   height: auto;
    margin: 0;
 }
 .products-container {
@@ -37,6 +37,7 @@
    .homepage {
       grid-template-columns: 1fr  ;
       grid-template-rows: 40vh auto ;
+      height: auto;
     
    }
    .homepage-content {
