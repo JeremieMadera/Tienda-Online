@@ -5,15 +5,16 @@ function Header() {
   return (
     <header className="header-container">
   
+      <div className="header-more-info">
+        !!!
+      </div>
+      <div className="header-logo">
+        logo
+      </div>
       
-      <nav className ="header-ancords">
-        <a href="/">Home</a>
-        <a href="/about">About</a>
-        <a href="/contact">Contact</a>
-      </nav>
             <div className ="header-buttons">
                 <button>Sign Up</button>
-                <button>Settings</button>
+               
             </div>
    
    

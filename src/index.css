@@ -7,7 +7,7 @@
 }
 :root 
 {
-    --primary-color: #ffffff;
+    --primary-color: #333232;
     --secondary-color: #313030;
    --background-color: #1d1c1c;
    --principal-font:system-ui, sans-serif;
@@ -22,6 +22,7 @@ body
     background-color: var(--background-color);
     color: white;
     line-height: 1.6;
+  
     
 }
 a
