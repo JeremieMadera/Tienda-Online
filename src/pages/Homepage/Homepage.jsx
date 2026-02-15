@@ -1,22 +1,51 @@
 import './Homepage.css';
 import { ProductCard } from '../../components/Productcard/productcard';
 import assets from '../../assets/camisa.png';
-
-
-
-
+import { useRef, useEffect } from 'react';
 
 function Homepage() {
+const scrollRef = useRef(null);
 
+ useEffect(() => {
+  const container = scrollRef.current;
+  if (!container) return;
+
+  const autoScroll = () => {
+    const { scrollLeft, offsetWidth, scrollWidth } = container;
+    
+    // Si estamos llegando al CLON (la foto 7)
+    if (scrollLeft + offsetWidth >= scrollWidth - 10) {
+      
+      // 1. Saltamos al inicio real (Foto 1) SIN animación
+      container.style.scrollBehavior = 'auto'; 
+      container.scrollLeft = 0;
+
+      // 2. Pequeño truco: esperamos un instante y volvemos a activar el scroll suave
+      // para que el SIGUIENTE movimiento sí sea fluido
+      setTimeout(() => {
+        container.style.scrollBehavior = 'smooth';
+        container.scrollBy({ left: offsetWidth, behavior: 'smooth' });
+      }, 50);
+
+    } else {
+      // Movimiento normal entre las fotos 1 y 6
+      container.scrollBy({ left: offsetWidth, behavior: 'smooth' });
+    }
+  };
+
+  const interval = setInterval(autoScroll, 3000);
+  return () => clearInterval(interval);
+}, []);
 
   return (
     <section className="homepage">
      
+     
         
         
-        <div className="homepage-content" >
-        <button className="nav-btn right" onClick={() => moveScroll('right')}>►</button>
-        <button className="nav-btn left" onClick={() => moveScroll('left')}>◄</button>
+        <div className="homepage-content" ref={scrollRef}>
+        {/*<button className="nav-btn right" onClick={() => moveScroll('right')}>►</button>*/}
+        {/*<button className="nav-btn left" onClick={() => moveScroll('left')}>◄</button>*/}
         
           <div className="card">
             <article>
@@ -62,7 +91,13 @@ function Homepage() {
               <p>$89.99</p>
               <button>Buy now</button>
             </article>
-            <img src={assets} alt="Product 6"></img></div>
+            <img src={assets} alt="Product 6"></img>
+            </div>
+
+            <div className="card">
+          <article><p>Brooch-Detail Wrap Jacket</p><p>$69.99</p><button>Buy now</button></article>
+          <img src={assets} alt="Product 1 Clone" />
+        </div>
         </div>
         
        
@@ -81,5 +116,8 @@ function Homepage() {
     
     
   );
-}
+
+  }
+
+  
 export default Homepage;
