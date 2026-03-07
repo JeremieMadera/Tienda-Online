@@ -1,8 +1,8 @@
 import './Contentsection.css';
 import { Fa6SolidBoxOpen } from '../../shared/components/Logos/Fa6SolidBoxOpen';
-import { FluentPremium12Filled } from '../../components/Logos/FluentPremium12Filled'; 
-import {FluentMdl2Market} from'../../components/Logos/FluentMdl2Market';
-import { ProductCard } from '../../components/Productcard/productcard'; 
+import { FluentPremium12Filled } from '../../shared/components/Logos/FluentPremium12Filled'; 
+import {FluentMdl2Market} from'../../shared/components/Logos/FluentMdl2Market';
+import { ProductCard } from '../../shared/components/Productcard/productcard'; 
 
 function Contentsection() {
   return (

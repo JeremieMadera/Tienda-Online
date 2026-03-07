@@ -1,5 +1,5 @@
 import './Homepage.css';
-import { ProductCard } from '../../components/Productcard/productcard';
+import { ProductCard } from '../../shared/components/Productcard/productcard';
 import assets from '../../assets/camisa.png';
 import { useRef, useEffect } from 'react';
 
