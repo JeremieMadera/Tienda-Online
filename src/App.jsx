@@ -1,9 +1,9 @@
 
-import Header from './components/Header/Header.jsx'
+import Header from './shared/components/Header/Header.jsx'
 import './App.css'
-import Footer from './components/Footer/Footer.jsx'
-import Homepage from './pages/Homepage/Homepage.jsx'
-import Contentsection from './pages/Contentsection/Contentsection.jsx'
+import Footer from './shared/components/Footer/Footer.jsx'
+import Homepage from './features/home/Homepage.jsx'
+import Contentsection from './features/content/Contentsection.jsx'
 
 
 

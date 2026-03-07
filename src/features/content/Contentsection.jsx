@@ -1,5 +1,5 @@
 import './Contentsection.css';
-import { Fa6SolidBoxOpen } from '../../components/Logos/Fa6SolidBoxOpen';
+import { Fa6SolidBoxOpen } from '../../shared/components/Logos/Fa6SolidBoxOpen';
 import { FluentPremium12Filled } from '../../components/Logos/FluentPremium12Filled'; 
 import {FluentMdl2Market} from'../../components/Logos/FluentMdl2Market';
 import { ProductCard } from '../../components/Productcard/productcard'; 
