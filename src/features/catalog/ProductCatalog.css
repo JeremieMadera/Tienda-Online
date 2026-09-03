@@ -1,0 +1,109 @@
+.catalog {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 72px 24px;
+}
+
+.catalog__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 48px;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.catalog__eyebrow {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-cognac);
+  margin-bottom: 12px;
+}
+
+.catalog__title {
+  font-family: var(--font-serif);
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 600;
+  color: var(--color-espresso);
+  line-height: 1.15;
+}
+
+.catalog__toggle {
+  display: flex;
+  border: 1px solid var(--color-sand);
+}
+
+.catalog__toggle-btn {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 10px 24px;
+  background-color: transparent;
+  color: var(--color-muted);
+  border: none;
+  border-right: 1px solid var(--color-sand);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.catalog__toggle-btn:last-child { border-right: none; }
+
+.catalog__toggle-btn.active {
+  background-color: var(--color-espresso);
+  color: var(--color-ivory);
+}
+
+.catalog__filters {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.catalog__filter-btn {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: capitalize;
+  padding: 7px 18px;
+  background-color: transparent;
+  color: var(--color-muted);
+  border: 1px solid var(--color-sand);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.catalog__filter-btn.active {
+  background-color: var(--color-espresso);
+  color: var(--color-ivory);
+  border-color: var(--color-espresso);
+}
+
+.catalog__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 48px 24px;
+}
+
+.catalog__empty {
+  text-align: center;
+  padding: 80px 0;
+  color: var(--color-muted);
+}
+
+.catalog__empty-title {
+  font-family: var(--font-serif);
+  font-size: 24px;
+  margin-bottom: 12px;
+}
+
+.catalog__empty-sub {
+  font-family: var(--font-sans);
+  font-size: 14px;
+}
