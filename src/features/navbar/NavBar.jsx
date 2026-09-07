@@ -7,6 +7,7 @@ const NAV_LINKS = ["all", "men", "women", "new arrivals", "sale"];
 export default function NavBar({ cartCount, onCartOpen, activeCategory, setActiveCategory }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 10);
@@ -40,9 +41,32 @@ export default function NavBar({ cartCount, onCartOpen, activeCategory, setActiv
         </nav>
 
         <div className="navbar__actions">
-          <button className="navbar__icon-btn" aria-label="Search">
-            <I8 name="search" size={20} color="17120B" />
-          </button>
+          {searchOpen ? (
+            <div className="navbar__search">
+              <input
+                className="navbar__search-input"
+                type="text"
+                placeholder="Search"
+                aria-label="Search products"
+                autoFocus
+              />
+              <button
+                className="navbar__icon-btn"
+                aria-label="Close search"
+                onClick={() => setSearchOpen(false)}
+              >
+                <I8 name="search" size={20} color="17120B" />
+              </button>
+            </div>
+          ) : (
+            <button
+              className="navbar__icon-btn"
+              aria-label="Open search"
+              onClick={() => setSearchOpen(true)}
+            >
+              <I8 name="search" size={20} color="17120B" />
+            </button>
+          )}
           <button className="navbar__icon-btn" aria-label="Account">
             <I8 name="user-male-circle" size={20} color="17120B" />
           </button>
