@@ -16,8 +16,8 @@ export default function NavBar({ cartCount, onCartOpen, activeCategory, setActiv
   }, []);
 
   const handleLink = (link) => {
-    if (["all", "men", "women"].includes(link)) setActiveCategory(link);
-    else document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
+    setActiveCategory(link);
+    document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
@@ -27,7 +27,7 @@ export default function NavBar({ cartCount, onCartOpen, activeCategory, setActiv
 
         <nav className="navbar__nav">
           {NAV_LINKS.map((link) => {
-            const isActive = ["all", "men", "women"].includes(link) && activeCategory === link;
+            const isActive = activeCategory === link;
             return (
               <button
                 key={link}

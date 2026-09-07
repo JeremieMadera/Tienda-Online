@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PRODUCTS } from "../../data/products";
 import ProductCard from "./ProductCard";
 import "./ProductCatalog.css";
@@ -6,19 +6,36 @@ import "./ProductCatalog.css";
 export default function ProductCatalog({ activeCategory, setActiveCategory, onAddToCart }) {
   const [activeSubcat, setActiveSubcat] = useState("all");
 
+  useEffect(() => {
+    setActiveSubcat("all");
+  }, [activeCategory]);
+
+  const matchesCategory = (product) => {
+    if (activeCategory === "all") return true;
+    if (activeCategory === "new arrivals") return product.badge === "New";
+    if (activeCategory === "sale") return product.badge === "Sale";
+    return product.category === activeCategory;
+  };
+
   const subcats = ["all", ...Array.from(new Set(
     PRODUCTS
-      .filter((p) => activeCategory === "all" || p.category === activeCategory)
+      .filter(matchesCategory)
       .map((p) => p.subcategory)
   ))];
 
   const filtered = PRODUCTS.filter((p) => {
-    const catMatch = activeCategory === "all" || p.category === activeCategory;
+    const catMatch = matchesCategory(p);
     const subcatMatch = activeSubcat === "all" || p.subcategory === activeSubcat;
     return catMatch && subcatMatch;
   });
 
-  const title = activeCategory === "all" ? "All Pieces" : activeCategory === "men" ? "Menswear" : "Womenswear";
+  const title = {
+    all: "All Pieces",
+    men: "Menswear",
+    women: "Womenswear",
+    "new arrivals": "New Arrivals",
+    sale: "Sale",
+  }[activeCategory];
 
   return (
     <section id="products" className="catalog">
