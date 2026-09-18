@@ -1,6 +1,7 @@
 import { hashPassword } from "../auth/password.js";
 import type {PublicUser} from '../types/user.types.js';
 import userRepository from "../repositories/user.repository.js";
+import { comparePassword } from "../auth/password.js";
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export async function registerUser(email: string, password: string): Promise<PublicUser> {
@@ -41,6 +42,31 @@ export async function registerUser(email: string, password: string): Promise<Pub
   throw error;
 }
     }
+
+    
+    export async function loginUser(email: string, password: string): Promise<PublicUser> {
+    email = email.trim().toLowerCase();
+    if (email === '' || password.trim() === '') {
+        throw new Error('Email and password cannot be empty');
+    }
+    const foundUser = await userRepository.getUserByEmail(email);
+    if (!foundUser) {
+        throw new Error('Invalid credentials');
+    }
+    
+    const isMatch = await comparePassword(password, foundUser.password_hash);
+    if (!isMatch) {
+        throw new Error('Invalid credentials');
+        
+    }
+    return {
+        id: foundUser.id,
+        email: foundUser.email,
+        created_at: foundUser.created_at
+    };
+
+  }
+
 
 
    
