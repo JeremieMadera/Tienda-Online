@@ -1,8 +1,9 @@
 import { hashPassword } from "../auth/password.js";
-import type { PublicUser } from '../types/user.types.js';
+import type { PublicUser, LoginResult } from '../types/user.types.js';
 import userRepository from "../repositories/user.repository.js";
 import { comparePassword } from "../auth/password.js";
-
+import { generateSessionToken, hashSessionToken } from "../auth/session-token.js";
+import { createSession } from "../repositories/session.repository.js";
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export async function registerUser(email: string, password: string): Promise<PublicUser> {
@@ -44,8 +45,7 @@ export async function registerUser(email: string, password: string): Promise<Pub
     }
 }
 
-
-export async function loginUser(email: string, password: string): Promise<PublicUser> {
+export async function loginUser(email: string, password: string): Promise<LoginResult> {
     email = email.trim().toLowerCase();
     if (email === '' || password.trim() === '') {
         throw new Error('Email and password cannot be empty');
@@ -58,15 +58,22 @@ export async function loginUser(email: string, password: string): Promise<Public
     const isMatch = await comparePassword(password, foundUser.password_hash);
     if (!isMatch) {
         throw new Error('Invalid credentials');
-
     }
+
+    const sessionToken = generateSessionToken();
+    const tokenHash = hashSessionToken(sessionToken);
+    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+
+    await createSession(foundUser.id, tokenHash, expiresAt);
+
     return {
-        id: foundUser.id,
-        email: foundUser.email,
-        created_at: foundUser.created_at
+        user: {
+            id: foundUser.id,
+            email: foundUser.email,
+            created_at: foundUser.created_at
+        },
+        sessionToken
     };
-
 }
-
 
 
