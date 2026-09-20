@@ -1,7 +1,7 @@
 const API_URL = "http://localhost:3000";
 
 export async function getProducts() {
-  const response = await fetch(`${API_URL}/products`);
+  const response = await fetch(`${API_URL}/products`, { credentials: "include" });
 
   if (!response.ok) {
     throw new Error("Failed to load products");
