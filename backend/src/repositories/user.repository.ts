@@ -13,7 +13,12 @@ class UserRepository {
     const result = await pool.query(query, [email]) ;
     return result.rows[0];
   }
+
+  async getUserById(id: number): Promise<PublicUser | undefined> {
+    const query = "SELECT id, email, created_at FROM users WHERE id = $1";
+    const result = await pool.query(query, [id]);
+    return result.rows[0];
+  }
 }
 
 export default new UserRepository();
-
