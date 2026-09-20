@@ -9,6 +9,7 @@ import CheckoutModal from "./features/checkout/CheckoutModal";
 import AuthModal from "./features/auth/AuthModal";
 import FooterSection from "./features/footer/FooterSection";
 import { getMe, logout } from "./services/authApi";
+import { getCart, addToCart, updateCartItem, removeFromCart } from "./services/cartApi";
 import "./App.css";
 
 function App() {
@@ -19,39 +20,81 @@ function App() {
   const [user, setUser] = useState(null);
   const [authOpen, setAuthOpen] = useState(false);
 
+  // Map backend item shape to frontend shape
+  const normalizeItems = (items) =>
+    items.map((i) => ({
+      ...i,
+      item_id: i.id,       // cart_items.id (for update/delete)
+      id: i.product_id,    // product id (for display/matching)
+      image: i.image_url,
+      price: Number(i.price),
+    }));
+
   useEffect(() => {
-    getMe().then(setUser).catch(() => setUser(null));
+    getMe().then((u) => {
+      setUser(u);
+      if (u) getCart().then((items) => setCartItems(normalizeItems(items))).catch(() => {});
+    }).catch(() => setUser(null));
   }, []);
 
   const handleLogout = async () => {
     await logout();
     setUser(null);
+    setCartItems([]);
   };
 
   const cartCount = cartItems.reduce((s, i) => s + i.quantity, 0);
 
-  const handleAddToCart = (product, size) => {
-    setCartItems((prev) => {
-      const existing = prev.find((i) => i.id === product.id && i.size === size);
-      if (existing)
-        return prev.map((i) =>
-          i.id === product.id && i.size === size ? { ...i, quantity: i.quantity + 1 } : i
-        );
-      return [...prev, { ...product, quantity: 1, size }];
-    });
+  const handleAddToCart = async (product, size) => {
+    if (user) {
+      try {
+        const items = await addToCart(product.id, size, 1);
+        setCartItems(normalizeItems(items));
+      } catch { /* ignore */ }
+    } else {
+      setCartItems((prev) => {
+        const existing = prev.find((i) => i.id === product.id && i.size === size);
+        if (existing)
+          return prev.map((i) =>
+            i.id === product.id && i.size === size ? { ...i, quantity: i.quantity + 1 } : i
+          );
+        return [...prev, { ...product, quantity: 1, size }];
+      });
+    }
     setCartOpen(true);
   };
 
-  const handleUpdateQty = (id, delta) => {
-    setCartItems((prev) =>
-      prev
-        .map((i) => (i.id === id ? { ...i, quantity: i.quantity + delta } : i))
-        .filter((i) => i.quantity > 0)
-    );
+  const handleUpdateQty = async (itemId, delta) => {
+    if (user) {
+      const item = cartItems.find((i) => i.id === itemId);
+      if (!item) return;
+      const newQty = item.quantity + delta;
+      try {
+        const items = newQty <= 0
+          ? await removeFromCart(item.item_id ?? item.id)
+          : await updateCartItem(item.item_id ?? item.id, newQty);
+        setCartItems(normalizeItems(items));
+      } catch { /* ignore */ }
+    } else {
+      setCartItems((prev) =>
+        prev.map((i) => (i.id === itemId ? { ...i, quantity: i.quantity + delta } : i))
+           .filter((i) => i.quantity > 0)
+      );
+    }
   };
 
-  const handleRemove = (id) =>
-    setCartItems((prev) => prev.filter((i) => i.id !== id));
+  const handleRemove = async (itemId) => {
+    if (user) {
+      const item = cartItems.find((i) => i.id === itemId);
+      if (!item) return;
+      try {
+        const items = await removeFromCart(item.item_id ?? item.id);
+        setCartItems(normalizeItems(items));
+      } catch { /* ignore */ }
+    } else {
+      setCartItems((prev) => prev.filter((i) => i.id !== itemId));
+    }
+  };
 
   const scrollToProducts = () =>
     document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
