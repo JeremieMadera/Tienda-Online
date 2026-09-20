@@ -3,11 +3,13 @@ import { register } from '../controllers/auth.controller.js';
 import { login } from '../controllers/login.controller.js';
 import { getCurrentUser } from '../controllers/me.controller.js';
 import { requireAuth } from '../middlewares/auth.middleware.js';
+import { logout } from '../controllers/logout.controller.js';
 
 const router = Router();
 
 router.post('/register', register);
 router.post('/login', login);
 router.get('/me', requireAuth, getCurrentUser);
+router.post('/logout', logout);
 
 export default router;
