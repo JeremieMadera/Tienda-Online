@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import NavBar from "./features/navbar/NavBar";
 import HeroBanner from "./features/hero/HeroBanner";
 import TrustStrip from "./features/trust/TrustStrip";
@@ -6,7 +6,9 @@ import ProductCatalog from "./features/catalog/ProductCatalog";
 import EditorialBanner from "./features/editorial/EditorialBanner";
 import CartDrawer from "./features/cart/CartDrawer";
 import CheckoutModal from "./features/checkout/CheckoutModal";
+import AuthModal from "./features/auth/AuthModal";
 import FooterSection from "./features/footer/FooterSection";
+import { getMe, logout } from "./services/authApi";
 import "./App.css";
 
 function App() {
@@ -14,6 +16,17 @@ function App() {
   const [cartItems, setCartItems] = useState([]);
   const [cartOpen, setCartOpen] = useState(false);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [user, setUser] = useState(null);
+  const [authOpen, setAuthOpen] = useState(false);
+
+  useEffect(() => {
+    getMe().then(setUser).catch(() => setUser(null));
+  }, []);
+
+  const handleLogout = async () => {
+    await logout();
+    setUser(null);
+  };
 
   const cartCount = cartItems.reduce((s, i) => s + i.quantity, 0);
 
@@ -50,6 +63,9 @@ function App() {
         onCartOpen={() => setCartOpen(true)}
         activeCategory={activeCategory}
         setActiveCategory={setActiveCategory}
+        user={user}
+        onAuthOpen={() => setAuthOpen(true)}
+        onLogout={handleLogout}
       />
       <HeroBanner onShop={scrollToProducts} />
       <TrustStrip />
@@ -67,6 +83,11 @@ function App() {
         onUpdateQty={handleUpdateQty}
         onRemove={handleRemove}
         onCheckout={() => { setCartOpen(false); setCheckoutOpen(true); }}
+      />
+      <AuthModal
+        open={authOpen}
+        onClose={() => setAuthOpen(false)}
+        onAuth={setUser}
       />
       <CheckoutModal
         open={checkoutOpen}

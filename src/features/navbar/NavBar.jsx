@@ -4,10 +4,11 @@ import "./NavBar.css";
 
 const NAV_LINKS = ["all", "men", "women", "new arrivals", "sale"];
 
-export default function NavBar({ cartCount, onCartOpen, activeCategory, setActiveCategory }) {
+export default function NavBar({ cartCount, onCartOpen, activeCategory, setActiveCategory, user, onAuthOpen, onLogout }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 10);
@@ -67,9 +68,18 @@ export default function NavBar({ cartCount, onCartOpen, activeCategory, setActiv
               <I8 name="search" size={20} color="17120B" />
             </button>
           )}
-          <button className="navbar__icon-btn" aria-label="Account">
+          <button className="navbar__icon-btn" aria-label="Account" onClick={user ? () => setAccountOpen(!accountOpen) : onAuthOpen}>
             <I8 name="user-male-circle" size={20} color="17120B" />
+            {user && <span className="navbar__badge navbar__badge--user">●</span>}
           </button>
+          {accountOpen && user && (
+            <div className="navbar__account-dropdown">
+              <p className="navbar__account-email">{user.email}</p>
+              <button className="navbar__account-logout" onClick={() => { setAccountOpen(false); onLogout(); }}>
+                Sign Out
+              </button>
+            </div>
+          )}
           <button className="navbar__icon-btn" aria-label="Cart" onClick={onCartOpen}>
             <I8 name="shopping-bag" size={20} color="17120B" />
             {cartCount > 0 && <span className="navbar__badge">{cartCount}</span>}
