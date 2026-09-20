@@ -4,6 +4,7 @@ type StoredUser =
         email: string;
         created_at: Date;
         password_hash: string;
+        role: 'user' | 'admin';
       };
 
 type PublicUser = Omit<StoredUser, 'password_hash'>;

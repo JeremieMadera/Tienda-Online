@@ -1,10 +1,18 @@
 import { useEffect, useState } from "react";
-import { PRODUCTS } from "../../data/products";
 import ProductCard from "./ProductCard";
+import { getProducts } from "../../services/productsApi";
 import "./ProductCatalog.css";
 
 export default function ProductCatalog({ activeCategory, setActiveCategory, onAddToCart }) {
+  const [products, setProducts] = useState([]);
   const [activeSubcat, setActiveSubcat] = useState("all");
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    getProducts()
+      .then(setProducts)
+      .catch(() => setError("No se pudieron cargar los productos."));
+  }, []);
 
   useEffect(() => {
     setActiveSubcat("all");
@@ -18,12 +26,12 @@ export default function ProductCatalog({ activeCategory, setActiveCategory, onAd
   };
 
   const subcats = ["all", ...Array.from(new Set(
-    PRODUCTS
+    products
       .filter(matchesCategory)
       .map((p) => p.subcategory)
   ))];
 
-  const filtered = PRODUCTS.filter((p) => {
+  const filtered = products.filter((p) => {
     const catMatch = matchesCategory(p);
     const subcatMatch = activeSubcat === "all" || p.subcategory === activeSubcat;
     return catMatch && subcatMatch;
@@ -74,6 +82,8 @@ export default function ProductCatalog({ activeCategory, setActiveCategory, onAd
           <ProductCard key={product.id} product={product} onAddToCart={onAddToCart} />
         ))}
       </div>
+
+      {error && <p>{error}</p>}
 
       {filtered.length === 0 && (
         <div className="catalog__empty">
