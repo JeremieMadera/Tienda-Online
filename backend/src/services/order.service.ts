@@ -1,6 +1,7 @@
 import Stripe from 'stripe';
 import pool from '../database.js';
 import cartRepository from '../repositories/cart.repository.js';
+import orderRepository from '../repositories/order.repository.js';
 
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 
@@ -127,4 +128,12 @@ export async function createPaidOrder(
   } finally {
     client.release();
   }
+}
+
+export async function getUserOrders(userId: number) {
+  return orderRepository.getByUserId(userId);
+}
+
+export async function getAllOrders() {
+  return orderRepository.getAll();
 }

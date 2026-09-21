@@ -1,5 +1,25 @@
 import type { Request, Response } from 'express';
-import { createPaidOrder } from '../services/order.service.js';
+import { createPaidOrder, getUserOrders, getAllOrders } from '../services/order.service.js';
+
+export async function getMyOrdersHandler(req: Request, res: Response): Promise<void> {
+  try {
+    const orders = await getUserOrders(res.locals.userId);
+    res.json({ orders });
+  } catch (error) {
+    console.error('Failed to get my orders:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+export async function getAllOrdersHandler(req: Request, res: Response): Promise<void> {
+  try {
+    const orders = await getAllOrders();
+    res.json({ orders });
+  } catch (error) {
+    console.error('Failed to get all orders:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
 
 export async function createOrderHandler(req: Request, res: Response): Promise<void> {
   const {
