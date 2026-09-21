@@ -46,3 +46,38 @@ export async function createProduct(
     badge
   );
 }
+
+export async function updateProduct(
+  id: number,
+  name: string,
+  price: number,
+  category: string,
+  subcategory: string,
+  imageUrl: string,
+  badge: string | null
+): Promise<Product> {
+  validateProductData(name, price, category, subcategory, imageUrl, badge);
+
+  const product = await productRepository.update(
+    id,
+    name.trim(),
+    price,
+    category.trim(),
+    subcategory.trim(),
+    imageUrl.trim(),
+    badge
+  );
+
+  if (!product) {
+    throw new Error('Product not found');
+  }
+
+  return product;
+}
+
+export async function deleteProduct(id: number): Promise<void> {
+  const success = await productRepository.delete(id);
+  if (!success) {
+    throw new Error('Product not found');
+  }
+}
