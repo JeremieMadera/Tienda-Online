@@ -8,11 +8,19 @@ import CartDrawer from "./features/cart/CartDrawer";
 import CheckoutModal from "./features/checkout/CheckoutModal";
 import AuthModal from "./features/auth/AuthModal";
 import FooterSection from "./features/footer/FooterSection";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { getMe, logout } from "./services/authApi";
 import { getCart, addToCart, updateCartItem, removeFromCart } from "./services/cartApi";
+import AdminDashboard from "./features/admin/AdminDashboard";
+import UserProfile from "./features/profile/UserProfile";
 import "./App.css";
 
 function App() {
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
   const [activeCategory, setActiveCategory] = useState("all");
   const [cartItems, setCartItems] = useState([]);
   const [cartOpen, setCartOpen] = useState(false);
@@ -110,14 +118,22 @@ function App() {
         onAuthOpen={() => setAuthOpen(true)}
         onLogout={handleLogout}
       />
-      <HeroBanner onShop={scrollToProducts} />
-      <TrustStrip />
-      <ProductCatalog
-        activeCategory={activeCategory}
-        setActiveCategory={setActiveCategory}
-        onAddToCart={handleAddToCart}
-      />
-      <EditorialBanner onShop={scrollToProducts} />
+      <Routes>
+        <Route path="/" element={
+          <>
+            <HeroBanner onShop={scrollToProducts} />
+            <TrustStrip />
+            <ProductCatalog
+              activeCategory={activeCategory}
+              setActiveCategory={setActiveCategory}
+              onAddToCart={handleAddToCart}
+            />
+            <EditorialBanner onShop={scrollToProducts} />
+          </>
+        } />
+        <Route path="/admin" element={<AdminDashboard user={user} />} />
+        <Route path="/profile" element={<UserProfile user={user} />} />
+      </Routes>
       <FooterSection />
       <CartDrawer
         open={cartOpen}

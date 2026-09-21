@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import I8 from "../../shared/components/I8/I8";
 import "./NavBar.css";
 
 const NAV_LINKS = ["all", "men", "women", "new arrivals", "sale"];
 
 export default function NavBar({ cartCount, onCartOpen, activeCategory, setActiveCategory, user, onAuthOpen, onLogout }) {
+  const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -24,7 +26,9 @@ export default function NavBar({ cartCount, onCartOpen, activeCategory, setActiv
   return (
     <header className={`navbar${scrolled ? " scrolled" : ""}`}>
       <div className="navbar__inner">
-        <span className="navbar__logo">FLOW FACTORY</span>
+        <span className="navbar__logo" onClick={() => navigate("/")} style={{ cursor: "pointer" }}>
+          FLOW FACTORY
+        </span>
 
         <nav className="navbar__nav">
           {NAV_LINKS.map((link) => {
@@ -75,6 +79,22 @@ export default function NavBar({ cartCount, onCartOpen, activeCategory, setActiv
           {accountOpen && user && (
             <div className="navbar__account-dropdown">
               <p className="navbar__account-email">{user.email}</p>
+              {user.role === "admin" && (
+                <button
+                  className="navbar__account-logout"
+                  style={{ borderBottom: "1px solid #eee", marginBottom: "5px", paddingBottom: "10px" }}
+                  onClick={() => { setAccountOpen(false); navigate("/admin"); }}
+                >
+                  Admin Panel
+                </button>
+              )}
+              <button
+                className="navbar__account-logout"
+                style={{ borderBottom: "1px solid #eee", marginBottom: "5px", paddingBottom: "10px" }}
+                onClick={() => { setAccountOpen(false); navigate("/profile"); }}
+              >
+                My Orders
+              </button>
               <button className="navbar__account-logout" onClick={() => { setAccountOpen(false); onLogout(); }}>
                 Sign Out
               </button>
