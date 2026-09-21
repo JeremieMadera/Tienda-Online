@@ -13,6 +13,8 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "@stripe/react-stripe-js": "^6.10.0",
+    "@stripe/stripe-js": "^9.16.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },

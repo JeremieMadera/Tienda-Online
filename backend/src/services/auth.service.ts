@@ -26,7 +26,8 @@ export async function registerUser(email: string, password: string): Promise<Pub
         return {
             id: user.id,
             email: user.email,
-            created_at: user.created_at
+            created_at: user.created_at,
+            role: user.role
         };
     }
     catch (error) {
@@ -70,10 +71,10 @@ export async function loginUser(email: string, password: string): Promise<LoginR
         user: {
             id: foundUser.id,
             email: foundUser.email,
-            created_at: foundUser.created_at
+            created_at: foundUser.created_at,
+            role: foundUser.role
         },
         sessionToken
     };
 }
-
 

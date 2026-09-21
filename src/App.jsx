@@ -125,12 +125,31 @@ function App() {
         cartItems={cartItems}
         onUpdateQty={handleUpdateQty}
         onRemove={handleRemove}
-        onCheckout={() => { setCartOpen(false); setCheckoutOpen(true); }}
+        onCheckout={() => {
+          setCartOpen(false);
+          if (user) {
+            setCheckoutOpen(true);
+          } else {
+            setAuthOpen(true);
+          }
+        }}
       />
       <AuthModal
         open={authOpen}
         onClose={() => setAuthOpen(false)}
-        onAuth={setUser}
+        onAuth={async (u) => {
+          setUser(u);
+          if (u) {
+            for (const item of cartItems) {
+              try {
+                await addToCart(item.id, item.size, item.quantity);
+              } catch (e) { /* ignore */ }
+            }
+            getCart()
+              .then((items) => setCartItems(normalizeItems(items)))
+              .catch(() => {});
+          }
+        }}
       />
       <CheckoutModal
         open={checkoutOpen}
