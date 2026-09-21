@@ -38,15 +38,6 @@ export default function FooterSection() {
               </p>
             ))}
           </div>
-
-          <div>
-            <h4 className="footer__col-title">Stay in the Know</h4>
-            <p className="footer__newsletter-desc">New arrivals, exclusive offers, and style notes — directly to your inbox.</p>
-            <div className="footer__newsletter-form">
-              <input type="email" placeholder="Your email" className="footer__newsletter-input" />
-              <button className="footer__newsletter-btn">Subscribe</button>
-            </div>
-          </div>
         </div>
 
         <div className="footer__bottom">
