@@ -3,7 +3,7 @@ import ProductCard from "./ProductCard";
 import { getProducts } from "../../services/productsApi";
 import "./ProductCatalog.css";
 
-export default function ProductCatalog({ activeCategory, setActiveCategory, onAddToCart }) {
+export default function ProductCatalog({ activeCategory, setActiveCategory, searchQuery, onAddToCart }) {
   const [products, setProducts] = useState([]);
   const [activeSubcat, setActiveSubcat] = useState("all");
   const [error, setError] = useState("");
@@ -34,7 +34,12 @@ export default function ProductCatalog({ activeCategory, setActiveCategory, onAd
   const filtered = products.filter((p) => {
     const catMatch = matchesCategory(p);
     const subcatMatch = activeSubcat === "all" || p.subcategory === activeSubcat;
-    return catMatch && subcatMatch;
+    const searchMatch = !searchQuery || 
+      p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.subcategory.toLowerCase().includes(searchQuery.toLowerCase());
+
+    return catMatch && subcatMatch && searchMatch;
   });
 
   const title = {

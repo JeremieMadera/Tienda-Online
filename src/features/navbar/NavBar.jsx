@@ -5,7 +5,7 @@ import "./NavBar.css";
 
 const NAV_LINKS = ["all", "men", "women", "new arrivals", "sale"];
 
-export default function NavBar({ cartCount, onCartOpen, activeCategory, setActiveCategory, user, onAuthOpen, onLogout }) {
+export default function NavBar({ cartCount, onCartOpen, activeCategory, setActiveCategory, searchQuery, setSearchQuery, user, onAuthOpen, onLogout }) {
   const navigate = useNavigate();
   const location = useLocation();
   const isHome = location.pathname === "/";
@@ -57,12 +57,27 @@ export default function NavBar({ cartCount, onCartOpen, activeCategory, setActiv
                 type="text"
                 placeholder="Search"
                 aria-label="Search products"
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  if (e.target.value.trim().length > 0) {
+                    if (location.pathname !== "/") {
+                      navigate("/");
+                      setTimeout(() => document.getElementById("products")?.scrollIntoView({ behavior: "smooth" }), 100);
+                    } else {
+                      document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
+                    }
+                  }
+                }}
                 autoFocus
               />
               <button
                 className="navbar__icon-btn"
                 aria-label="Close search"
-                onClick={() => setSearchOpen(false)}
+                onClick={() => {
+                  setSearchOpen(false);
+                  setSearchQuery("");
+                }}
               >
                 <I8 name="search" size={20} color="17120B" />
               </button>

@@ -22,6 +22,7 @@ function App() {
     window.scrollTo(0, 0);
   }, [location.pathname]);
   const [activeCategory, setActiveCategory] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
   const [cartItems, setCartItems] = useState([]);
   const [cartOpen, setCartOpen] = useState(false);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
@@ -118,6 +119,8 @@ function App() {
         onCartOpen={() => setCartOpen(true)}
         activeCategory={activeCategory}
         setActiveCategory={setActiveCategory}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
         user={user}
         onAuthOpen={() => setAuthOpen(true)}
         onLogout={handleLogout}
@@ -130,6 +133,7 @@ function App() {
             <ProductCatalog
               activeCategory={activeCategory}
               setActiveCategory={setActiveCategory}
+              searchQuery={searchQuery}
               onAddToCart={handleAddToCart}
             />
             <EditorialBanner onShop={scrollToProducts} />
