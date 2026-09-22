@@ -104,8 +104,12 @@ function App() {
     }
   };
 
-  const scrollToProducts = () =>
+  const scrollToProducts = (category) => {
+    if (category && typeof category === "string") {
+      setActiveCategory(category);
+    }
     document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <div style={{ minHeight: "100vh" }}>

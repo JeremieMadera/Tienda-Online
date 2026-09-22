@@ -27,8 +27,8 @@ export default function HeroBanner({ onShop }) {
           Curated pieces for men and women — refined fabrics, considered cuts, and timeless silhouettes that move with your life.
         </p>
         <div className="hero__buttons">
-          <button className="hero__btn-primary" onClick={onShop}>Shop Women</button>
-          <button className="hero__btn-secondary" onClick={onShop}>Shop Men</button>
+          <button className="hero__btn-primary" onClick={() => onShop("women")}>Shop Women</button>
+          <button className="hero__btn-secondary" onClick={() => onShop("men")}>Shop Men</button>
         </div>
         <div className="hero__stats">
           {STATS.map(({ label, value }) => (
