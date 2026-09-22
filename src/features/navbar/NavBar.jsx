@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import I8 from "../../shared/components/I8/I8";
 import "./NavBar.css";
 
@@ -7,6 +7,8 @@ const NAV_LINKS = ["all", "men", "women", "new arrivals", "sale"];
 
 export default function NavBar({ cartCount, onCartOpen, activeCategory, setActiveCategory, user, onAuthOpen, onLogout }) {
   const navigate = useNavigate();
+  const location = useLocation();
+  const isHome = location.pathname === "/";
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -30,20 +32,22 @@ export default function NavBar({ cartCount, onCartOpen, activeCategory, setActiv
           FLOW FACTORY
         </span>
 
-        <nav className="navbar__nav">
-          {NAV_LINKS.map((link) => {
-            const isActive = activeCategory === link;
-            return (
-              <button
-                key={link}
-                className={`navbar__link${isActive ? " active" : ""}`}
-                onClick={() => handleLink(link)}
-              >
-                {link}
-              </button>
-            );
-          })}
-        </nav>
+        {isHome && (
+          <nav className="navbar__nav">
+            {NAV_LINKS.map((link) => {
+              const isActive = activeCategory === link;
+              return (
+                <button
+                  key={link}
+                  className={`navbar__link${isActive ? " active" : ""}`}
+                  onClick={() => handleLink(link)}
+                >
+                  {link}
+                </button>
+              );
+            })}
+          </nav>
+        )}
 
         <div className="navbar__actions">
           {searchOpen ? (
@@ -114,17 +118,19 @@ export default function NavBar({ cartCount, onCartOpen, activeCategory, setActiv
         </div>
       </div>
 
-      <div className={`navbar__mobile-menu${mobileOpen ? " open" : ""}`}>
-        {NAV_LINKS.map((link) => (
-          <button
-            key={link}
-            className="navbar__mobile-link"
-            onClick={() => { handleLink(link); setMobileOpen(false); }}
-          >
-            {link}
-          </button>
-        ))}
-      </div>
+      {isHome && (
+        <div className={`navbar__mobile-menu${mobileOpen ? " open" : ""}`}>
+          {NAV_LINKS.map((link) => (
+            <button
+              key={link}
+              className="navbar__mobile-link"
+              onClick={() => { handleLink(link); setMobileOpen(false); }}
+            >
+              {link}
+            </button>
+          ))}
+        </div>
+      )}
     </header>
   );
 }
