@@ -6,6 +6,7 @@ export default function EditorialBanner({ onShop }) {
       <img
         src="https://images.unsplash.com/photo-1619603364937-8d7af41ef206?w=1400&h=800&fit=crop&auto=format"
         alt="Man in brown wool overcoat"
+        loading="lazy"
       />
       <div className="editorial__overlay">
         <p className="editorial__eyebrow">Discover the Collection</p>

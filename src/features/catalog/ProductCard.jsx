@@ -19,7 +19,7 @@ export default function ProductCard({ product, onAddToCart }) {
   return (
     <article className="card">
       <div className="card__image-wrap">
-        <img src={product.image} alt={product.name} />
+        <img src={product.image} alt={product.name} loading="lazy" />
 
         <div className="card__overlay">
           <div className="card__sizes">

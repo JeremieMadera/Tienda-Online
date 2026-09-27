@@ -31,7 +31,7 @@ export default function CartDrawer({ open, onClose, cartItems, onUpdateQty, onRe
             cartItems.map((item) => (
               <div key={`${item.id}-${item.size}`} className="cart-item">
                 <div className="cart-item__img">
-                  <img src={item.image} alt={item.name} />
+                  <img src={item.image} alt={item.name} loading="lazy" />
                 </div>
                 <div className="cart-item__info">
                   <div>
