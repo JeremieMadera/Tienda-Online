@@ -1,10 +1,15 @@
 import type { Request, Response } from 'express';
 import { createProduct, getProducts, updateProduct, deleteProduct } from '../services/product.service.js';
 
-export async function listProducts(_req: Request, res: Response): Promise<void> {
+export async function listProducts(req: Request, res: Response): Promise<void> {
   try {
-    const products = await getProducts();
-    res.status(200).json({ products });
+    const page = parseInt(req.query.page as string, 10) || 1;
+    const limit = parseInt(req.query.limit as string, 10) || 10;
+    const category = req.query.category as string | undefined;
+    const search = req.query.search as string | undefined;
+
+    const result = await getProducts(page, limit, category, search);
+    res.status(200).json(result);
   } catch (error) {
     console.error('Failed to load products:', error);
     res.status(500).json({ error: 'Internal server error' });

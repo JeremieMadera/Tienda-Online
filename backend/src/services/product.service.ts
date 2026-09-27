@@ -23,8 +23,22 @@ function validateProductData(
   }
 }
 
-export async function getProducts(): Promise<Product[]> {
-  return productRepository.getAll();
+export async function getProducts(
+  page: number,
+  limit: number,
+  category?: string,
+  search?: string
+): Promise<{ products: Product[]; total: number; page: number; limit: number; totalPages: number }> {
+  const offset = (page - 1) * limit;
+  const result = await productRepository.getAll(limit, offset, category, search);
+  
+  return {
+    products: result.products,
+    total: result.total,
+    page,
+    limit,
+    totalPages: Math.ceil(result.total / limit)
+  };
 }
 
 export async function createProduct(

@@ -12,14 +12,40 @@ export type Product = {
 };
 
 class ProductRepository {
-  async getAll(): Promise<Product[]> {
-    const result = await pool.query(
-      `SELECT id, name, price, category, subcategory, image_url, badge, created_at
-       FROM products
-       ORDER BY id`
-    );
+  async getAll(
+    limit: number,
+    offset: number,
+    category?: string,
+    search?: string
+  ): Promise<{ products: Product[]; total: number }> {
+    let queryStr = `SELECT id, name, price, category, subcategory, image_url, badge, created_at FROM products WHERE 1=1`;
+    const params: any[] = [];
 
-    return result.rows;
+    if (category && category !== 'all' && category !== 'new arrivals' && category !== 'sale') {
+      params.push(category);
+      queryStr += ` AND category = $${params.length}`;
+    } else if (category === 'new arrivals') {
+      params.push('New');
+      queryStr += ` AND badge = $${params.length}`;
+    } else if (category === 'sale') {
+      params.push('Sale');
+      queryStr += ` AND badge = $${params.length}`;
+    }
+
+    if (search) {
+      params.push(`%${search}%`);
+      queryStr += ` AND (name ILIKE $${params.length} OR category ILIKE $${params.length} OR subcategory ILIKE $${params.length})`;
+    }
+
+    const countQuery = `SELECT COUNT(*) FROM (${queryStr}) as count_query`;
+    const countResult = await pool.query(countQuery, params);
+    const total = parseInt(countResult.rows[0].count, 10);
+
+    queryStr += ` ORDER BY id LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
+    params.push(limit, offset);
+
+    const result = await pool.query(queryStr, params);
+    return { products: result.rows, total };
   }
 
   async create(

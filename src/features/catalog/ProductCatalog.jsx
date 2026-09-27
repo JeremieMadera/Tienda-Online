@@ -5,42 +5,24 @@ import "./ProductCatalog.css";
 
 export default function ProductCatalog({ activeCategory, setActiveCategory, searchQuery, onAddToCart }) {
   const [products, setProducts] = useState([]);
-  const [activeSubcat, setActiveSubcat] = useState("all");
   const [error, setError] = useState("");
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const limit = 8; // 8 products per page
 
   useEffect(() => {
-    getProducts()
-      .then(setProducts)
+    getProducts(page, limit, activeCategory, searchQuery)
+      .then((res) => {
+        setProducts(res.products || []);
+        setTotalPages(res.totalPages || 1);
+      })
       .catch(() => setError("No se pudieron cargar los productos."));
-  }, []);
+  }, [page, activeCategory, searchQuery]);
 
   useEffect(() => {
-    setActiveSubcat("all");
-  }, [activeCategory]);
-
-  const matchesCategory = (product) => {
-    if (activeCategory === "all") return true;
-    if (activeCategory === "new arrivals") return product.badge === "New";
-    if (activeCategory === "sale") return product.badge === "Sale";
-    return product.category === activeCategory;
-  };
-
-  const subcats = ["all", ...Array.from(new Set(
-    products
-      .filter(matchesCategory)
-      .map((p) => p.subcategory)
-  ))];
-
-  const filtered = products.filter((p) => {
-    const catMatch = matchesCategory(p);
-    const subcatMatch = activeSubcat === "all" || p.subcategory === activeSubcat;
-    const searchMatch = !searchQuery || 
-      p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      p.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      p.subcategory.toLowerCase().includes(searchQuery.toLowerCase());
-
-    return catMatch && subcatMatch && searchMatch;
-  });
+    // Reset to page 1 when category or search changes
+    setPage(1);
+  }, [activeCategory, searchQuery]);
 
   const title = {
     all: "All Pieces",
@@ -70,27 +52,41 @@ export default function ProductCatalog({ activeCategory, setActiveCategory, sear
         </div>
       </div>
 
-      <div className="catalog__filters">
-        {subcats.map((sub) => (
-          <button
-            key={sub}
-            className={`catalog__filter-btn${activeSubcat === sub ? " active" : ""}`}
-            onClick={() => setActiveSubcat(sub)}
-          >
-            {sub}
-          </button>
-        ))}
-      </div>
-
       <div className="catalog__grid">
-        {filtered.map((product) => (
+        {products.map((product) => (
           <ProductCard key={product.id} product={product} onAddToCart={onAddToCart} />
         ))}
       </div>
 
+      {totalPages > 1 && (
+        <div className="catalog__pagination" style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '2rem' }}>
+          <button 
+            disabled={page === 1} 
+            onClick={() => {
+              setPage((p) => Math.max(1, p - 1));
+              document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
+            }}
+            style={{ padding: '0.5rem 1rem', cursor: page === 1 ? 'not-allowed' : 'pointer', border: '1px solid #ddd', background: '#fff' }}
+          >
+            Previous
+          </button>
+          <span style={{ padding: '0.5rem', fontWeight: 'bold' }}>Page {page} of {totalPages}</span>
+          <button 
+            disabled={page === totalPages} 
+            onClick={() => {
+              setPage((p) => Math.min(totalPages, p + 1));
+              document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
+            }}
+            style={{ padding: '0.5rem 1rem', cursor: page === totalPages ? 'not-allowed' : 'pointer', border: '1px solid #ddd', background: '#fff' }}
+          >
+            Next
+          </button>
+        </div>
+      )}
+
       {error && <p>{error}</p>}
 
-      {filtered.length === 0 && (
+      {products.length === 0 && (
         <div className="catalog__empty">
           <p className="catalog__empty-title">No pieces found</p>
           <p className="catalog__empty-sub">Try a different category or filter.</p>

@@ -47,10 +47,6 @@ export default function ProductCard({ product, onAddToCart }) {
             {product.badge}
           </span>
         )}
-
-        <button className="card__wishlist" aria-label="Wishlist" onClick={(e) => e.stopPropagation()}>
-          <I8 name="like" size={16} color="17120B" />
-        </button>
       </div>
 
       <div className="card__info">
