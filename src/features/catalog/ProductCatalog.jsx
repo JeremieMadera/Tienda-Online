@@ -1,22 +1,26 @@
 import { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
+import ProductSkeleton from "./ProductSkeleton";
 import { getProducts } from "../../services/productsApi";
 import "./ProductCatalog.css";
 
 export default function ProductCatalog({ activeCategory, setActiveCategory, searchQuery, onAddToCart }) {
   const [products, setProducts] = useState([]);
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const limit = 8; // 8 products per page
 
   useEffect(() => {
+    setIsLoading(true);
     getProducts(page, limit, activeCategory, searchQuery)
       .then((res) => {
         setProducts(res.products || []);
         setTotalPages(res.totalPages || 1);
       })
-      .catch(() => setError("No se pudieron cargar los productos."));
+      .catch(() => setError("No se pudieron cargar los productos."))
+      .finally(() => setIsLoading(false));
   }, [page, activeCategory, searchQuery]);
 
   useEffect(() => {
@@ -53,12 +57,16 @@ export default function ProductCatalog({ activeCategory, setActiveCategory, sear
       </div>
 
       <div className="catalog__grid">
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} onAddToCart={onAddToCart} />
-        ))}
+        {isLoading
+          ? Array.from({ length: limit }).map((_, index) => (
+              <ProductSkeleton key={index} />
+            ))
+          : products.map((product) => (
+              <ProductCard key={product.id} product={product} onAddToCart={onAddToCart} />
+            ))}
       </div>
 
-      {totalPages > 1 && (
+      {!isLoading && totalPages > 1 && (
         <div className="catalog__pagination" style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '2rem' }}>
           <button 
             disabled={page === 1} 
@@ -86,7 +94,7 @@ export default function ProductCatalog({ activeCategory, setActiveCategory, sear
 
       {error && <p>{error}</p>}
 
-      {products.length === 0 && (
+      {!isLoading && products.length === 0 && (
         <div className="catalog__empty">
           <p className="catalog__empty-title">No pieces found</p>
           <p className="catalog__empty-sub">Try a different category or filter.</p>
