@@ -27,8 +27,8 @@ export default function AdminDashboard({ user }) {
   const loadProducts = async () => {
     try {
       setLoading(true);
-      const data = await getProducts();
-      setProducts(data);
+      const data = await getProducts(1, 100); // Fetch up to 100 products for admin view
+      setProducts(data.products || []);
     } catch (err) {
       console.error("Failed to load products", err);
     } finally {
