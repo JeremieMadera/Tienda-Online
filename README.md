@@ -98,7 +98,7 @@ npm run dev
 
 | Admin Dashboard | Stripe Checkout |
 |:---:|:---:|
-| <img width="1366" height="596" alt="Admin Dashboard Image" src="https://github.com/user-attachments/assets/5dc4392c-58c5-44e1-b50c-884673e2853a" /> | <img width="1366" height="596" alt="Checkout Image" src="https://github.com/user-attachments/assets/79d58a0e-98df-42bd-9840-b3f15ef25294" /> |
+| <img width="1366" height="596" alt="Admin Dashboard Image" src="https://github.com/user-attachments/assets/5dc4392c-58c5-44e1-b50c-884673e2853a" /> | <img width="1366" height="588" alt="Checkout Image" src="https://github.com/user-attachments/assets/657153ca-8b17-4cd9-bd7a-5090eaae637c" /> |
 
 ---
 
