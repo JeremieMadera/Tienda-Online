@@ -16,8 +16,8 @@ export async function login(req: Request, res: Response) {
         const result = await loginUser(email, password);
         res.cookie('session_token', result.sessionToken, {
             httpOnly: true,
-            sameSite: 'lax',
-            secure: false,
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+            secure: process.env.NODE_ENV === 'production',
             maxAge: 24 * 60 * 60 * 1000
         });
         res.status(200).json({ message: 'Login successful', user: result.user });

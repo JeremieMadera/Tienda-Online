@@ -17,6 +17,10 @@ export async function logout(req: Request, res: Response): Promise<void> {
     await deleteSessionByTokenHash(tokenHash);
   }
 
-  res.clearCookie('session_token');
+  res.clearCookie('session_token', {
+      httpOnly: true,
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      secure: process.env.NODE_ENV === 'production',
+  });
   res.status(204).send();
 }
