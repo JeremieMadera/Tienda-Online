@@ -139,6 +139,6 @@
 
 @media (max-width: 768px) {
   .hero { grid-template-columns: 1fr; min-height: auto; }
-  .hero__image-wrap { height: 55vw; }
+  .hero__image-wrap { height: 60vh; min-height: 400px; }
   .hero__content { padding: 48px 32px; }
 }
