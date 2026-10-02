@@ -110,7 +110,7 @@ export default function CheckoutModal({ open, onClose, cartItems, onConfirm }) {
     const timeout = setTimeout(() => controller.abort(), 15000);
 
     try {
-      const res = await fetch("http://localhost:3000/payment/create-intent", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/payment/create-intent`, {
         method: "POST",
         credentials: "include",
         signal: controller.signal,
@@ -212,7 +212,7 @@ export default function CheckoutModal({ open, onClose, cartItems, onConfirm }) {
                   form={form}
                   onBack={() => setStep("shipping")}
                   onSuccess={async (paymentIntentId) => {
-                    const response = await fetch("http://localhost:3000/payment/create-order", {
+                    const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/payment/create-order`, {
                       method: "POST",
                       headers: { "Content-Type": "application/json" },
                       credentials: "include",

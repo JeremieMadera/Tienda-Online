@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3000";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 export async function getProducts(page = 1, limit = 10, category = "", search = "") {
   const params = new URLSearchParams();
