@@ -1,7 +1,6 @@
 # Luxe E-Commerce Platform 🛍️
 
-🚀 **Live Demo:** [https://tienda-online-ashen-eight.vercel.app](https://tienda-online-ashen-eight.vercel.app)  
-📡 **API Endpoint:** [https://tienda-online-v4kf.onrender.com](https://tienda-online-v4kf.onrender.com)
+🚀 **Live Demo:** [https://tienda-online-ashen-eight.vercel.app](https://tienda-online-ashen-eight.vercel.app)
 
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![Vite](https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=FFD62E)
